@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const authorController = require('../controllers/authorController')
-// const blogController = require('../controllers/blogController')
+const blogController = require('../controllers/blogController')
 
 
 router.get('/test-me', function(req,res){
@@ -11,9 +11,9 @@ router.get('/test-me', function(req,res){
 
 router.post('/authors', authorController.createAuthors)
 
-// router.post('/blogs', blogController.createBlog)
+router.post('/blogs', blogController.createNewBlog)
 
-router.get('/authors', authorController.createAuthors)
+// router.get('/authors', authorController.createAuthors)
 
 // router.get('/blogs', blogController.createBlog)
 
