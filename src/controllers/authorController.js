@@ -62,4 +62,4 @@ const createAuthors = async function(req,res){
 
 
 
-module.export.createAuthors = createAuthors
+module.exports.createAuthors = createAuthors
