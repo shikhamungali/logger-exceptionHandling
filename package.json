@@ -1,0 +1,25 @@
+{
+  "name": "blogging_site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shikhamungali/Project1-Blogging_Site.git"
+  },
+  "author": "Shikha Mungali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shikhamungali/Project1-Blogging_Site/issues"
+  },
+  "homepage": "https://github.com/shikhamungali/Project1-Blogging_Site#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.5.4",
+    "nodemon": "^2.0.19"
+  }
+}

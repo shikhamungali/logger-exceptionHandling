@@ -6,7 +6,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb+srv://Shikhamungali:4t2GRX51VoOU37yQ@cluster0.8hmxve1.mongodb.net/Blogging_Project-DB?retryWrites=true&w=majority",{
+mongoose.connect("mongodb+srv://GroupDatabase:yysYmXKv6mOkoW9N@cluster0.jwlonbw.mongodb.net/Group35-DB?retryWrites=true&w=majority",{
 useNewUrlParser : true
 })
 .then(()=>{
