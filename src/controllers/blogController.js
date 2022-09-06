@@ -91,10 +91,17 @@ const updateBlogData = async function (req, res) {
     try {
         const blogId = req.params.blogId;
         const blogUpdatedData = req.body
-
+       //==================================== if data is not entered ==================================
         if (Object.keys(blogUpdatedData).length == 0)
            { return res.status(404).send({ status: false, msg: "Please enter Data to be updated" });}
 
+         //================================if blogId IS NOT CORRECT ================================
+         let paramBlogID = await blogModel.findById(blogId)  
+         if (!paramBlogID){
+             return res.status(404).send({ status: false, msg: "blogId is not correct" })
+         }
+
+      //====================================== updating data =========================================
         let blog = await blogModel.findOneAndUpdate(
             { _id: blogId, isDeleted: false },
             {
@@ -102,6 +109,10 @@ const updateBlogData = async function (req, res) {
                 $push: { tags: blogUpdatedData.tags, subcategory: blogUpdatedData.subcategory }
             },
             { new: true });
+            //==================== if get null or blog not found =============================================
+            if(!blog){
+                return res.status(404).send({ status: false, msg: "blog not found" })
+            }
         return res.status(200).send({ status: true, data: blog });
 
     } catch (error) {
@@ -143,7 +154,7 @@ const deleteBlogsByQuery = async function(req,res){
             isDeletedFalse['category'] = category
         }
         if(dataQuery.authorId){
-            isDeletedFalse['authorId'] = authorId
+            isDeletedFalse['authorId'] = authorId 
         }
         if(dataQuery.tags){
             isDeletedFalse['tags'] = tags
@@ -159,6 +170,10 @@ const deleteBlogsByQuery = async function(req,res){
         //==========================if data is not found to matching query =======================
         if(!dataToDelete){
             return res.status(404).send({status:false,message:"No matching blog found"})
+        }
+        //===========================if blog is already deleted =================================
+        if(dataToDelete.isDeleted===true){
+            return res.status(404).send({ status: false, message: "blog already deleted" })
         }
         //====================== if found data matching to the query ==========================
         if(dataToDelete){
