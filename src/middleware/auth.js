@@ -35,7 +35,7 @@ const authorisation = async function(req,res,next){
         if (blog.authorId !== req.loggedInAuthorId) { 
             return res.status(403).send({ status: false, msg: 'Author logged is not allowed to modify the requested data' })
         }
-        next(
+        next()
      }
     catch (error) {
         res.status(500).send({ status: false, Error: error.message })

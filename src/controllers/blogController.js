@@ -66,7 +66,7 @@ const getBlogData = async function (req, res) {
         if (Object.keys(queryData).length == 0) {
             const blog = await blogModel.find({ isPublished: true, isDeleted: false })
             if (blog.length == 0) {
-                return res.status(404).send({ status: false, msg: "Blog doesn't Exists, field is required." })
+                return res.status(404).send({ status: false, msg: "Blog doesn't Exists." })
             }
             res.status(200).send({ status: true, data: blog })
         }
@@ -128,7 +128,7 @@ const deleteBlogs = async function (req, res) {
         let blog = await blogModel.findById(blogIdData)
         // ======================== if the blog is already deleted =======================================
         if (blog.isDeleted === true) {
-            return res.status(404).send({ status: false, message: "No blog exists" })
+            return res.status(404).send({ status: false, message: "No blog exists with this blogId" })
         }
         //=============================== if data is not deleted ==========================================
         let deletedBlog = await blogModel.findOneAndUpdate({ _id: blogIdData }, { isDeleted: true, deletedAt: new Date() })
@@ -174,6 +174,10 @@ const deleteBlogsByQuery = async function(req,res){
         //===========================if blog is already deleted =================================
         if(dataToDelete.isDeleted===true){
             return res.status(404).send({ status: false, message: "blog already deleted" })
+        }
+        //===========================if blog is not published=================================
+        if (dataToDelete.isPublished === false) {
+            return res.status(404).send({ status: false, message: "blog is not yet published" })
         }
         //====================== if found data matching to the query ==========================
         if(dataToDelete){

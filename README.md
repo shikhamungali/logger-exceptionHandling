@@ -142,5 +142,3 @@ Refer below sample
 
 
 
-GroupDatabase username
-yysYmXKv6mOkoW9N password
