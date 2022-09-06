@@ -115,23 +115,59 @@ const deleteBlogs = async function (req, res) {
     try {
         let blogIdData = req.params.blogId
         let blog = await blogModel.findById(blogIdData)
+        // ======================== if the blog is already deleted =======================================
         if (blog.isDeleted === true) {
             return res.status(404).send({ status: false, message: "No blog exists" })
         }
-        let deletedBlog = await blogModel.findOneAndUpdate({ _id: blogId }, { isDeleted: true, deletedAt: new Date() })
+        //=============================== if data is not deleted ==========================================
+        let deletedBlog = await blogModel.findOneAndUpdate({ _id: blogIdData }, { isDeleted: true, deletedAt: new Date() })
         res.status(200).send({ status: true, msg: "Data is successfully deleted" })
     } catch (error) {
         res.status(500).send({ status: false, Error: error.message })
     }
 }
 
-///--------------------------------------------------- DELETE /blogs?queryParams -----------------------------------------
+///-------------------------------------------- DELETE /blogs?queryParams ----------------------------------
 
 const deleteBlogsByQuery = async function(req,res){
     try{
          const dataQuery = req.query
-         const isDeletedFalse = {isDeleted:false,}
-    }
+        const isDeletedFalse = { isDeleted: false, deletedAt :null}
+         //===================== if no filters are provided ================================
+         if (Object.keys(dataQuery).length === 0){
+            return res.status(404).send({status:false,message:"please provide filters to fetch data to be deleted"})
+         }
+
+        let { category, authorId, tags, subcategory, isPublished } = dataQuery
+        if(dataQuery.category){
+            isDeletedFalse['category'] = category
+        }
+        if(dataQuery.authorId){
+            isDeletedFalse['authorId'] = authorId
+        }
+        if(dataQuery.tags){
+            isDeletedFalse['tags'] = tags
+        }
+        if(dataQuery.subcategory){
+            isDeletedFalse['subcategory'] =subcategory
+        }
+        if(dataQuery.isPublished){
+            isDeletedFalse['isPublished'] = isPublished
+        }
+
+        const dataToDelete = await blogModel.findOne(dataQuery)
+        //==========================if data is not found to matching query =======================
+        if(!dataToDelete){
+            return res.status(404).send({status:false,message:"No matching blog found"})
+        }
+        //====================== if found data matching to the query ==========================
+        if(dataToDelete){
+            const deletedBlogs = await blogModel.find(isDeletedFalse)
+            const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlogs } } , { $set: { isDeleted: true, deletedAt: new Date() },new:true})
+            console.log(updateDeletdBlogData)
+            res.status(200).send({status:true,message:"Blog deleted sucessfully"})
+        }
+        }
     catch(error){
         res.status(500).send({ status: false, Error: error.message })
     }
