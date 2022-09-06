@@ -1,10 +1,13 @@
 const authorModel = require('../models/authormodel')
 
+
+//-------------------------------------------------- APIs /authors --------------------------------
+
 const createAuthors = async function(req,res){
     try{
 
         const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
-        const nameRegex = /^[a-z]+$/i
+        const nameRegex = /^[a-z]{3,15}+$/i
 //=========================================== user not entered any data ==========================================
         let authorData = req.body
         if(Object.keys(authorData).length == 0){
@@ -52,7 +55,7 @@ const createAuthors = async function(req,res){
         }
 
         let createdAuthor = await authorModel.create(authorData)
-        res.status(200).send({status:true,message:"Author created sucessfully",data:createdAuthor})
+        res.status(201).send({status:true,message:"Author created sucessfully",data:createdAuthor})
 
     }
     catch(error){
@@ -61,5 +64,16 @@ const createAuthors = async function(req,res){
 }
 
 
+//--------------------------------------------- get /authors -------------------------------------------------
+
+const getAuthor = async function (req, res) {
+    try{let alldata = await authorModel.find()
+    res.status(200).send({ status: true, data: alldata })}
+    catch(error){
+        res.status(500).send({ status: false, Error: error.message })
+    }
+}
+
 
 module.exports.createAuthors = createAuthors
+module.exports.getAuthor = getAuthor

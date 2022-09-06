@@ -29,4 +29,4 @@ const AuthorSchema = new mongoose.Schema({
     { timestamps: true })
 
 
-    module.exports = mongoose.model('Author',AuthorSchema)
+    module.exports = mongoose.model('Author',AuthorSchema) //authors

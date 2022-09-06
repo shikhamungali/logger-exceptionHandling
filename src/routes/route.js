@@ -8,14 +8,20 @@ router.get('/test-me', function(req,res){
     res.send('My first Api!')
 })
 
+//------------------------------------------- AUTHOR api ----------------------------------------------------
 
 router.post('/authors', authorController.createAuthors)
+router.get('/authors', authorController.getAuthor)
+
+
+//--------------------------------------- BLOG api -------------------------------------------------------------
 
 router.post('/blogs', blogController.createNewBlog)
+router.get('/blogs', blogController.getBlogData)
 
-// router.get('/authors', authorController.createAuthors)
-
-// router.get('/blogs', blogController.createBlog)
+router.put('/blogs/:blogId', blogController.updateBlogData) //---------- UPDATE BLOG -------------------------
+router.delete('/blogs/:blogId', blogController.deleteBlogs) //-----------DELETE BLOG ---------------------
+router.delete('/blogs', blogController.deleteBlogsByQuery) //-----------DELETE BLOG by queryparams ---------------------
 
 
 
