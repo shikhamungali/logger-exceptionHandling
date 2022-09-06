@@ -1,4 +1,5 @@
 const express = require('express')
+require("dotenv").config()
 const route = require ('./routes/route.js')
 const mongoose = require('mongoose')
 const app = express()
@@ -6,7 +7,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb+srv://GroupDatabase:yysYmXKv6mOkoW9N@cluster0.jwlonbw.mongodb.net/Group35-DB?retryWrites=true&w=majority",{
+mongoose.connect(process.env.Mongo_Db_String,{
 useNewUrlParser : true
 })
 .then(()=>{

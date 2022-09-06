@@ -1,4 +1,5 @@
 const authorModel = require('../models/authormodel')
+const jwt = require ('jsonwebtoken')
 
 
 //-------------------------------------------------- APIs /authors --------------------------------
@@ -75,5 +76,40 @@ const getAuthor = async function (req, res) {
 }
 
 
+//-----------------------------------------------POST /login------------------------------------------------
+
+const authorLogin = async function (req, res) {
+    try {
+        let userName = req.body.email;
+        let password = req.body.password;
+
+        let user = await authorModel.findOne({ email: userName, password: password });
+        //======================== if body is empty =============================================
+        if (Object.keys(req.body).length == 0) {
+            return res.status(400).send({ status: false, msg: "Data is required" })
+        }
+        //============================= if username is not entered ====================================
+        if (!userName) {
+            return res.status(400).send({ status: false, msg: "UserName is required" })
+        }
+        //================================= if password id not entered ================================
+        if (!password) {
+            return res.status(400).send({ status: false, msg: "Password is required" })
+        }
+        //===================================== if no matching data found =======================================
+        if (!user) {
+            return res.status(401).send({ status: false, msg: "INVALID CREDENTIALS" });
+        }
+        //=============================== token generation =====================================================
+        let payload = { _id: user._id,Group:"Group35",projectName:"BloggingSite" }      
+        let token = jwt.sign(payload, "Blogging_site_group_35");
+        res.setHeader("x-api-key", token);
+        res.send({ status: true, token: token });
+    } catch (error) {
+        res.status(500).send({ staus: false, msg: error.message })
+    }
+};
+
 module.exports.createAuthors = createAuthors
 module.exports.getAuthor = getAuthor
+module.exports.authorLogin = authorLogin
