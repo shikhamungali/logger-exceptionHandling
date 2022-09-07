@@ -95,11 +95,7 @@ const updateBlogData = async function (req, res) {
         if (Object.keys(blogUpdatedData).length == 0)
            { return res.status(404).send({ status: false, msg: "Please enter Data to be updated" });}
 
-         //================================if blogId IS NOT CORRECT ================================
-         let paramBlogID = await blogModel.findById(blogId)  
-         if (!paramBlogID){
-             return res.status(404).send({ status: false, msg: "blogId is not correct" })
-         }
+       
 
       //====================================== updating data =========================================
         let blog = await blogModel.findOneAndUpdate(
@@ -111,7 +107,7 @@ const updateBlogData = async function (req, res) {
             { new: true });
             //==================== if get null or blog not found =============================================
             if(!blog){
-                return res.status(404).send({ status: false, msg: "blog not found" })
+                return res.status(404).send({ status: false, msg: "This blog is already deleted" })
             }
         return res.status(200).send({ status: true, data: blog });
 

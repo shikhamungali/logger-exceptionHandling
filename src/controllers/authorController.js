@@ -98,7 +98,7 @@ const authorLogin = async function (req, res) {
         }
         //===================================== if no matching data found =======================================
         if (!user) {
-            return res.status(401).send({ status: false, msg: "INVALID CREDENTIALS" });
+            return res.status(401).send({ status: false, msg: "UserName or Password incorrect" });
         }
         //=============================== token generation =====================================================
         let payload = { _id: user._id,Group:"Group35",projectName:"BloggingSite" }      
