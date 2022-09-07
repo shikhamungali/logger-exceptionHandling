@@ -8,10 +8,9 @@ const authentication = async function(req,res,next){
         if (!token) {
             return res.status(401).send({ status: false, msg: "token must be present" })
         };
-       //============================= decoding the token ========================================
-        let decodedToken = jwt.verify(token, "BloggingWebsite", function (error, decodedToken) {
-            if (error)
-               { return res.status(401).send({ status: false, msg: "token is invalid" })};
+        //============================= decoding the token ========================================
+        let decodedToken = jwt.verify(token, "Blogging_site_group_35", function (error, decodedToken) {
+            if (error) { return res.status(401).send({ status: false, msg: "token is invalid" }) };
             req.loggedInAuthorId = decodedToken._id
 
         });
@@ -27,11 +26,7 @@ const authentication = async function(req,res,next){
 const authorisation = async function(req,res,next){
     try {
         let blogToBeModified = req.params.blogId
-        console.log(blogToBeModified)
-
         let blog = await blogModel.findById({ _id: blogToBeModified }) 
-        console.log(blog)
-        console.log(req.loggedInAuthorId)
         if (blog.authorId !== req.loggedInAuthorId) { 
             return res.status(403).send({ status: false, msg: 'Author logged is not allowed to modify the requested data' })
         }

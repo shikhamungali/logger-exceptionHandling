@@ -182,6 +182,14 @@ const deleteBlogsByQuery = async function(req,res){
         //====================== if found data matching to the query ==========================
         if(dataToDelete){
             const deletedBlogs = await blogModel.find(isDeletedFalse)
+            //=========================== authorisation using filters ========================
+            const blogAuth = deletedBlogs.filter((blog) => {                        
+                if (blog.authorId == req.loggedInAuthorId)
+                    {return blog._id}
+                else
+                    {return res.status(404).send({ status: false, msg: "User is not authorised to do changes" })}
+            })
+           //============================ updating blog ======================================
             const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlogs } } , { $set: { isDeleted: true, deletedAt: new Date() },new:true})
             console.log(updateDeletdBlogData)
             res.status(200).send({status:true,message:"Blog deleted sucessfully"})
