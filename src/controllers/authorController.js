@@ -35,7 +35,7 @@ const createAuthors = async function(req,res){
             return res.status(400).send({status:false,message:"title is required"})
         }
         if (["Mr", "Mrs", "Miss"].indexOf(authorData.title)== -1){
-            return res.status(400).send({ status: false, message: "please enter Mr ,Mrs,Miss" })
+            return res.status(400).send({ status: false, message: "please enter Mr , Mrs, Miss" })
         }
 //=========================================email validation =============================================
         if (!authorData.email){
