@@ -2,6 +2,7 @@ const blogModel = require('../models/blogModel')
 const authorModel = require('../models/authorModel')
 
 
+
 //--------------------------------------------POST /blogs---------------------------------------------------
 
 
@@ -94,7 +95,7 @@ const updateBlogData = async function (req, res) {
        //==================================== if data is not entered ==================================
         if (Object.keys(blogUpdatedData).length == 0)
            { return res.status(404).send({ status: false, msg: "Please enter Data to be updated" });}
-
+        
        
 
       //====================================== updating data =========================================
@@ -196,10 +197,7 @@ const deleteBlogsByQuery = async function(req,res){
     }
 }
 
-module.exports.createNewBlog = createNewBlog
-module.exports.getBlogData = getBlogData
-module.exports.updateBlogData=updateBlogData
-module.exports.deleteBlogs=deleteBlogs
-module.exports.deleteBlogsByQuery=deleteBlogsByQuery
+module.exports = {createNewBlog,getBlogData,updateBlogData,deleteBlogs,deleteBlogsByQuery}
+
 
 
