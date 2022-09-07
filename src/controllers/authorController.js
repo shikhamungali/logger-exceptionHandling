@@ -1,4 +1,4 @@
-const authorModel = require('../models/authormodel')
+const authorModel = require('../models/authorModel')
 const jwt = require ('jsonwebtoken')
 
 
@@ -8,7 +8,7 @@ const createAuthors = async function(req,res){
     try{
 
         const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
-        const nameRegex = /^[a-z]{3,15}+$/i
+        const nameRegex = /^[a-z]+$/i
 //=========================================== user not entered any data ==========================================
         let authorData = req.body
         if(Object.keys(authorData).length == 0){
