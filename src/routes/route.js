@@ -20,7 +20,7 @@ router.post('/login',authorController.authorLogin)//------------------ author lo
 //--------------------------------------- BLOG api -------------------------------------------------------------
 
 router.post('/blogs', middleware.authentication, blogController.createNewBlog)
-router.get('/blogs', blogController.getBlogData)
+router.get('/blogs', middleware.authentication, blogController.getBlogData)
 
 router.put('/blogs/:blogId', middleware.authentication, middleware.authorisation, blogController.updateBlogData) //---------- UPDATE BLOG -------------------------
 router.delete('/blogs/:blogId', middleware.authentication, middleware.authorisation, blogController.deleteBlogs) //-----------DELETE BLOG by blogid---------------------
