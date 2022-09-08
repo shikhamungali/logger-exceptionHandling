@@ -32,7 +32,7 @@ const createNewBlog = async function (req, res) {
             return res.status(400).send({ status: false, msg: "AuthorId is required" })
         }
         if (!mongoose.Types.ObjectId.isValid(blogData.authorId)) {
-            return res.status(404).send({ status: false, msg: "invalid blogId format" });
+            return res.status(404).send({ status: false, msg: "invalid authorId format" });
         }
         //***************** if author id is not matched with token author id *******************
         if (!(blogData.authorId == req.loggedInAuthorId)) {

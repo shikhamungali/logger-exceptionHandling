@@ -59,7 +59,7 @@ const authorisationQuery = async function (req, res, next) {
         let dataQuery = req.query
         if (dataQuery.authorId) {
             if (!mongoose.Types.ObjectId.isValid(dataQuery.authorId)) {
-                return res.status(404).send({ status: false, msg: "invalid blogId format" });
+                return res.status(404).send({ status: false, msg: "invalid authorId format" });
             }
         }
         if (!(Object.keys(dataQuery).length === 0)) {
