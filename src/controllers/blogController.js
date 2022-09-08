@@ -33,7 +33,11 @@ const createNewBlog = async function (req, res) {
             return res.status(400).send({ status: false, msg: "AuthorId is required" })
         }
         if (!mongoose.Types.ObjectId.isValid(blogData.authorId)) {
-            return res.status(404).send({ status: false, msg: "invalid blogId format" });
+            return res.status(404).send({ status: false, msg: "invalid authorId format" });
+        }
+        //***************** if author id is not matched with token author id *******************
+        if (!(blogData.authorId == req.loggedInAuthorId)) {
+            return res.status(404).send({ status: false, msg: "author loggedIn is not allowed to create other author blogs" });
         }
 
         // ============================== setting date if isPublished is true ================================
@@ -149,27 +153,25 @@ const deleteBlogs = async function (req, res) {
 const deleteBlogsByQuery = async function (req, res) {
     try {
         const dataQuery = req.query
-        const isDeletedFalse = { isDeleted: false, deletedAt: null }
+        const isDeletedFalse = { isDeleted: false, deletedAt: null, isPublished: true }
         //===================== if no filters are provided ================================
         if (Object.keys(dataQuery).length === 0) {
             return res.status(404).send({ status: false, message: "please provide filters to fetch data to be deleted" })
         }
 
-        let { category, authorId, tags, subcategory, isPublished } = dataQuery
+        let { category, authorId, tags, subcategory } = dataQuery
         if (dataQuery.category) {
             isDeletedFalse['category'] = category
         }
         if (dataQuery.authorId) {
             isDeletedFalse['authorId'] = authorId
         }
+
         if (dataQuery.tags) {
             isDeletedFalse['tags'] = tags
         }
         if (dataQuery.subcategory) {
             isDeletedFalse['subcategory'] = subcategory
-        }
-        if (dataQuery.isPublished) {
-            isDeletedFalse['isPublished'] = isPublished
         }
 
         const dataToDelete = await blogModel.findOne(dataQuery)
@@ -177,30 +179,14 @@ const deleteBlogsByQuery = async function (req, res) {
         if (!dataToDelete) {
             return res.status(404).send({ status: false, message: "No matching blog found" })
         }
-        //===========================if blog is already deleted =================================
-        if (dataToDelete.isDeleted === true) {
-            return res.status(404).send({ status: false, message: "blog already deleted" })
-        }
-        //===========================if blog is not published=================================
-        if (dataToDelete.isPublished === false) {
-            return res.status(404).send({ status: false, message: "blog is not yet published" })
-        }
         //====================== if found data matching to the query ==========================
         if (dataToDelete) {
-            const deletedBlogs = await blogModel.find(isDeletedFalse)
-            //=========================== authorisation using filters ========================
-            const blogAuth = deletedBlogs.filter((blog) => {
-                if (blog.authorId == req.loggedInAuthorId) {
-                    blog._id
-                }
-                else {
-                    return res.status(404).send({ status: false, msg: "User is not authorised to do changes" })
-                }
-            })
+            const deletedBlog = await blogModel.find(isDeletedFalse)
+
             //============================ updating blog ======================================
-            const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlogs } }, { $set: { isDeleted: true, deletedAt: new Date() }, new: true })
-            console.log(updateDeletdBlogData)
+            const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlog } }, { $set: { isDeleted: true, deletedAt: new Date() }, new: true })
             return res.status(200).send({ status: true, message: "Blog deleted sucessfully" })
+
         }
     }
     catch (error) {
