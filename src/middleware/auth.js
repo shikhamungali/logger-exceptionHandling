@@ -11,7 +11,9 @@ const authentication = async function (req, res, next) {
         };
         //============================= decoding the token ========================================
         let decodedToken = jwt.verify(token, "Blogging_site_group_35", function (error, decodedToken) {
-            if (error) { return res.status(401).send({ status: false, msg: "token is invalid" }) };
+            if (error) {
+                return res.status(401).send({ status: false, msg: "token is invalid" })
+            };
             return req.loggedInAuthorId = decodedToken._id
 
         });
@@ -28,9 +30,11 @@ const authentication = async function (req, res, next) {
 const authorisation = async function (req, res, next) {
     try {
         let blogToBeModified = req.params.blogId
+        //========================= if blogId is not valid ================================================
         if (!mongoose.isValidObjectId(blogToBeModified)) {
             return res.status(404).send({ status: false, msg: "invalid blogId" });
         }
+        //================================= to check authority ===========================================
         let blog = await blogModel.findById({ _id: blogToBeModified })
         if (blog) {
             if (blog.authorId != req.loggedInAuthorId) {
@@ -45,7 +49,7 @@ const authorisation = async function (req, res, next) {
 
     }
     catch (error) {
-        res.status(500).send({ status: false, Error: error.message })
+        return res.status(500).send({ status: false, Error: error.message })
     }
 }
 

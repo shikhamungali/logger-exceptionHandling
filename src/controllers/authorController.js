@@ -44,7 +44,6 @@ const createAuthors = async function (req, res) {
         if (!authorData.email.match(emailRegex)) {
             return res.status(400).send({ status: false, message: "Invalid Format of email." })
         }
-
         let emailAlreadyExist = await authorModel.findOne({ email: authorData.email })
         if (emailAlreadyExist) {
             return res.status(400).send({ status: false, message: "Email already exist." })
@@ -55,12 +54,13 @@ const createAuthors = async function (req, res) {
             return res.status(400).send({ status: false, message: "password is required" })
         }
 
+        //========================================= author created ========================================
         let createdAuthor = await authorModel.create(authorData)
-        res.status(201).send({ status: true, message: "Author created sucessfully", data: createdAuthor })
+        return res.status(201).send({ status: true, message: "Author created sucessfully", data: createdAuthor })
 
     }
     catch (error) {
-        res.status(500).send({ status: false, Error: error.message })
+        return res.status(500).send({ status: false, Error: error.message })
     }
 }
 
@@ -70,10 +70,10 @@ const createAuthors = async function (req, res) {
 const getAuthor = async function (req, res) {
     try {
         let alldata = await authorModel.find()
-        res.status(200).send({ status: true, data: alldata })
+        return res.status(200).send({ status: true, data: alldata })
     }
     catch (error) {
-        res.status(500).send({ status: false, Error: error.message })
+        return res.status(500).send({ status: false, Error: error.message })
     }
 }
 
@@ -106,9 +106,10 @@ const authorLogin = async function (req, res) {
         let payload = { _id: user._id, Group: "Group35", projectName: "BloggingSite" }
         let token = jwt.sign(payload, "Blogging_site_group_35");
         res.setHeader("x-api-key", token);
-        res.send({ status: true, token: token });
-    } catch (error) {
-        res.status(500).send({ staus: false, msg: error.message })
+        return res.status(201).send({ status: true, token: token });
+    }
+    catch (error) {
+        return res.status(500).send({ staus: false, msg: error.message })
     }
 };
 
