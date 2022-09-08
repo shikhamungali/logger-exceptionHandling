@@ -154,10 +154,7 @@ const deleteBlogsByQuery = async function (req, res) {
     try {
         const dataQuery = req.query
         const isDeletedFalse = { isDeleted: false, deletedAt: null, isPublished: true }
-        //===================== if no filters are provided ================================
-        if (Object.keys(dataQuery).length === 0) {
-            return res.status(404).send({ status: false, message: "please provide filters to fetch data to be deleted" })
-        }
+    
 
         let { category, authorId, tags, subcategory } = dataQuery
         if (dataQuery.category) {

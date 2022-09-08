@@ -17,9 +17,7 @@ const authentication = function (req, res, next) {
                 req.loggedInAuthorId = decodedToken._id
                 next()
             }
-
         });
-
     }
     catch (error) {
         return res.status(500).send({ status: false, Error: error.message })
@@ -48,12 +46,14 @@ const authorisation = async function (req, res, next) {
         else {
             return res.status(404).send({ status: false, msg: "blogId does not exist" })
         }
-
     }
     catch (error) {
         return res.status(500).send({ status: false, Error: error.message })
     }
 }
+
+
+
 
 const authorisationQuery = async function (req, res, next) {
     try {
@@ -63,6 +63,7 @@ const authorisationQuery = async function (req, res, next) {
                 return res.status(404).send({ status: false, msg: "invalid authorId format" });
             }
         }
+        //=============== if entry in query params ===============================================
         if (!(Object.keys(dataQuery).length === 0)) {
             const dataToDelete = await blogModel.find(dataQuery)
 
@@ -75,16 +76,19 @@ const authorisationQuery = async function (req, res, next) {
                     return res.status(403).send({ status: false, msg: 'Author loggedIn is not allowed to modify the requested data' })
                 }
                 next()
-
             }
         }
+        //================== no entry in query params ==========================================
         else {
-            return res.status(404).send({ status: false, msg: "blog does not exist" })
+            return res.status(404).send({ status: false, message: "please provide filters to fetch data to be deleted" })
         }
     }
     catch (error) {
         return res.status(500).send({ status: false, Error: error.message })
     }
 }
+
+
+
 
 module.exports = { authentication, authorisation, authorisationQuery }
