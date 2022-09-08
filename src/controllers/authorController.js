@@ -9,6 +9,8 @@ const createAuthors = async function (req, res) {
 
         const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
         const nameRegex = /^[a-z]+$/i
+        const passwordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[#@$!%?&])[A-Za-z\d#@$!%?&]{8,}$/
+            
         //=========================================== user not entered any data ==========================================
         let authorData = req.body
         if (Object.keys(authorData).length == 0) {
@@ -52,6 +54,9 @@ const createAuthors = async function (req, res) {
         //====================================== password validation =======================================       
         if (!authorData.password) {
             return res.status(400).send({ status: false, message: "password is required" })
+        }
+        if (!passwordRegex.test(authorData.password)) {
+            return res.status(400).send({ status: false, message: "Invalid format of password" })
         }
 
         //========================================= author created ========================================

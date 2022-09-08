@@ -6,6 +6,7 @@ const authorModel = require('../models/authorModel')
 //--------------------------------------------POST /blogs---------------------------------------------------
 
 
+
 const createNewBlog = async function (req, res) {
     try {
         let blogData = req.body
@@ -184,8 +185,12 @@ const deleteBlogsByQuery = async function (req, res) {
             const deletedBlogs = await blogModel.find(isDeletedFalse)
             //=========================== authorisation using filters ========================
             const blogAuth = deletedBlogs.filter((blog) => {
-                if (blog.authorId == req.loggedInAuthorId) { return blog._id }
-                else { return res.status(404).send({ status: false, msg: "User is not authorised to do changes" }) }
+                if (blog.authorId == req.loggedInAuthorId) { 
+                     blog._id 
+                    }
+                else {
+                     return res.status(404).send({ status: false, msg: "User is not authorised to do changes" }) 
+                    }
             })
             //============================ updating blog ======================================
             const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlogs } }, { $set: { isDeleted: true, deletedAt: new Date() }, new: true })
