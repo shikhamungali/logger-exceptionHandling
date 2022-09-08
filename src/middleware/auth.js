@@ -73,9 +73,12 @@ const authorisationQuery = async function (req, res, next) {
                     return x
                 })
                 if (!blogAuth.includes(req.loggedInAuthorId)) {
-                    return res.status(403).send({ status: false, msg: 'Author loggedIn is not allowed to modify the requested data' })
+                    return res.status(403).send({ status: false, msg: 'Author loggedIn is not allowed to modify the requested data of other author' })
                 }
                 next()
+            }
+            else{
+                return res.status(404).send({ status: false, message: "No matching blog found to be deleted" })
             }
         }
         //================== no entry in query params ==========================================

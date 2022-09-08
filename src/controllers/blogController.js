@@ -154,7 +154,7 @@ const deleteBlogsByQuery = async function (req, res) {
     try {
         const dataQuery = req.query
         const isDeletedFalse = { isDeleted: false, deletedAt: null, isPublished: true }
-    
+
 
         let { category, authorId, tags, subcategory } = dataQuery
         if (dataQuery.category) {
@@ -180,9 +180,14 @@ const deleteBlogsByQuery = async function (req, res) {
         if (dataToDelete) {
             const deletedBlog = await blogModel.find(isDeletedFalse)
 
-            //============================ updating blog ======================================
-            const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlog } }, { $set: { isDeleted: true, deletedAt: new Date() }, new: true })
-            return res.status(200).send({ status: true, message: "Blog deleted sucessfully" })
+            if ((deletedBlog.length === 0)) {
+                return res.status(404).send({ status: false, message: "No matching blog found to be deleted" })
+            }
+            else {
+                //============================ updating blog ======================================
+                const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlog } }, { $set: { isDeleted: true, deletedAt: new Date() }, new: true })
+                return res.status(200).send({ status: true, message: "Blog deleted sucessfully" })
+            }
 
         }
     }
