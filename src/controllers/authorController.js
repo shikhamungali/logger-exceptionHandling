@@ -8,9 +8,9 @@ const createAuthors = async function (req, res) {
     try {
 
         const emailRegex = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/
-        const nameRegex = /^[a-z]+$/i
-        const passwordRegex = /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[#@$!%?&])[A-Za-z\d#@$!%?&]{8,}$/
-            
+        const nameRegex = /^[a-z\s]+$/i
+        const passwordRegex = /^(?!.\s)[A-Za-z\d@$!%?&]{8,}$/
+
         //=========================================== user not entered any data ==========================================
         let authorData = req.body
         if (Object.keys(authorData).length == 0) {

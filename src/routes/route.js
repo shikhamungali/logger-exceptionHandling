@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const authorController = require('../controllers/authorController')
-const blogController = require('../controllers/blogController')
-const middleware = require("../middleware/auth")
+const { createAuthors, getAuthor, authorLogin } = require('../controllers/authorController')
+const { createNewBlog, getBlogData, updateBlogData, deleteBlogs, deleteBlogsByQuery } = require('../controllers/blogController')
+const { authentication, authorisation } = require("../middleware/auth")
 
 
 router.get('/test-me', function (req, res) {
@@ -11,20 +11,20 @@ router.get('/test-me', function (req, res) {
 
 //------------------------------------------- AUTHOR api ----------------------------------------------------
 
-router.post('/authors', authorController.createAuthors)
-router.get('/authors', authorController.getAuthor)
-router.post('/login', authorController.authorLogin)//------------------ author login ----------------------------
+router.post('/authors', createAuthors)
+router.get('/authors', getAuthor)
+router.post('/login', authorLogin)//------------------ author login ----------------------------
 
 
 
 //--------------------------------------- BLOG api -------------------------------------------------------------
 
-router.post('/blogs', middleware.authentication, blogController.createNewBlog)
-router.get('/blogs', middleware.authentication, blogController.getBlogData)
+router.post('/blogs', authentication, createNewBlog)
+router.get('/blogs', authentication, getBlogData)
 
-router.put('/blogs/:blogId', middleware.authentication, middleware.authorisation, blogController.updateBlogData) //--- UPDATE BLOG -------
-router.delete('/blogs/:blogId', middleware.authentication, middleware.authorisation, blogController.deleteBlogs) //-DELETE BLOG by blogid-
-router.delete('/blogs', middleware.authentication, blogController.deleteBlogsByQuery) //-----------DELETE BLOG by queryparams -----
+router.put('/blogs/:blogId', authentication, authorisation, updateBlogData) //---- UPDATE BLOG -----
+router.delete('/blogs/:blogId', authentication, authorisation, deleteBlogs) //---- DELETE BLOG by blogid ---
+router.delete('/blogs', authentication, deleteBlogsByQuery) //------ DELETE BLOG by queryparams -----
 
 
 
