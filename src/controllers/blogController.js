@@ -1,5 +1,6 @@
 const blogModel = require('../models/blogModel')
 const authorModel = require('../models/authorModel')
+const mongoose = require('mongoose')
 
 
 
@@ -31,6 +32,10 @@ const createNewBlog = async function (req, res) {
         if (!blogData.authorId) {
             return res.status(400).send({ status: false, msg: "AuthorId is required" })
         }
+        if (!mongoose.Types.ObjectId.isValid(blogData.authorId)) {
+            return res.status(404).send({ status: false, msg: "invalid blogId format" });
+        }
+
         // ============================== setting date if isPublished is true ================================
         if (blogData.isPublished === true) {
             blogData['publishedAt'] = new Date()
@@ -110,7 +115,7 @@ const updateBlogData = async function (req, res) {
             { new: true });
         //==================== if get null or blog not found or blog is deleted =============================================
         if (!blog) {
-            return res.status(404).send({ status: false, msg: "This blog is already deleted" })
+            return res.status(404).send({ status: false, msg: "The blog is deleted" })
         }
         return res.status(200).send({ status: true, data: blog });
 
@@ -128,7 +133,7 @@ const deleteBlogs = async function (req, res) {
         let blog = await blogModel.findById(blogIdData)
         // ======================== if the blog is already deleted =======================================
         if (blog.isDeleted === true) {
-            return res.status(404).send({ status: false, message: "blog is deleted" })
+            return res.status(404).send({ status: false, message: "The blog is already deleted" })
         }
         //=============================== if blog is not deleted and want to delete it ====================
         let deletedBlog = await blogModel.findOneAndUpdate({ _id: blogIdData }, { isDeleted: true, deletedAt: new Date() })
@@ -185,12 +190,12 @@ const deleteBlogsByQuery = async function (req, res) {
             const deletedBlogs = await blogModel.find(isDeletedFalse)
             //=========================== authorisation using filters ========================
             const blogAuth = deletedBlogs.filter((blog) => {
-                if (blog.authorId == req.loggedInAuthorId) { 
-                     blog._id 
-                    }
+                if (blog.authorId == req.loggedInAuthorId) {
+                    blog._id
+                }
                 else {
-                     return res.status(404).send({ status: false, msg: "User is not authorised to do changes" }) 
-                    }
+                    return res.status(404).send({ status: false, msg: "User is not authorised to do changes" })
+                }
             })
             //============================ updating blog ======================================
             const updateDeletdBlogData = await blogModel.updateMany({ _id: { $in: deletedBlogs } }, { $set: { isDeleted: true, deletedAt: new Date() }, new: true })

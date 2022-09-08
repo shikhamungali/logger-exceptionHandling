@@ -13,12 +13,13 @@ const authentication = async function (req, res, next) {
         let decodedToken = jwt.verify(token, "Blogging_site_group_35", function (error, decodedToken) {
             if (error) {
                 return res.status(401).send({ status: false, msg: "token is invalid" })
-            };
-            req.loggedInAuthorId = decodedToken._id
-
-        });
-        next()
-
+            }else{
+                req.loggedInAuthorId = decodedToken._id
+                next()
+            }
+         
+        } );
+    
     }
     catch (error) {
         return res.status(500).send({ status: false, Error: error.message })
