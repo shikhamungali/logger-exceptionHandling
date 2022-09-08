@@ -14,10 +14,11 @@ const authentication = async function (req, res, next) {
             if (error) {
                 return res.status(401).send({ status: false, msg: "token is invalid" })
             };
-            return req.loggedInAuthorId = decodedToken._id
+            req.loggedInAuthorId = decodedToken._id
 
         });
         next()
+
     }
     catch (error) {
         return res.status(500).send({ status: false, Error: error.message })
@@ -31,7 +32,7 @@ const authorisation = async function (req, res, next) {
         let blogToBeModified = req.params.blogId
         //========================= if blogId is not valid ================================================
         if (!mongoose.isValidObjectId(blogToBeModified)) {
-            return res.status(404).send({ status: false, msg: "invalid blogId" });
+            return res.status(404).send({ status: false, msg: "invalid blogId format" });
         }
         //================================= to check authority ===========================================
         let blog = await blogModel.findById({ _id: blogToBeModified })
