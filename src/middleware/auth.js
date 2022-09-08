@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const blogModel = require('../models/blogModel')
 const mongoose = require('mongoose')
 
-const authentication = async function (req, res, next) {
+const authentication = function (req, res, next) {
     try {
         let token = req.headers["x-api-key"];
         if (!token) token = req.headers["X-api-key"]; //=======handleing case sensitivty =========================
