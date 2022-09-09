@@ -171,6 +171,10 @@ const deleteBlogsByQuery = async function (req, res) {
         }
 
         const dataToDelete = await blogModel.findOne(dataQuery)
+        //==========================if data is not found to matching query =======================
+        if (!dataToDelete) {
+            return res.status(404).send({ status: false, message: "No matching blog found" })
+        }
         //===========================if blog is not published=================================
         if (dataToDelete.isPublished === false) {
             return res.status(404).send({ status: false, message: "blog is not yet published" })
