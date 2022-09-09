@@ -22,6 +22,7 @@ const authentication = function (req, res, next) {
     catch (error) {
         return res.status(500).send({ status: false, Error: error.message })
     }
+
 }
 
 
