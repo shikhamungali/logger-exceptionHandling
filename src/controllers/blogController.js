@@ -42,7 +42,7 @@ const createNewBlog = async function (req, res) {
         }
         //***************** if author id is not matched with token author id *******************
         if (!(blogData.authorId == req.loggedInAuthorId)) {
-            return res.status(404).send({ status: false, msg: "author loggedIn is not allowed to create other author blogs" });
+            return res.status(403).send({ status: false, msg: "author loggedIn is not allowed to create other author blogs" });
         }
 
         // ============================== setting date if isPublished is true ================================
