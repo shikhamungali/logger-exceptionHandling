@@ -22,14 +22,14 @@ const createAuthors = async function (req, res) {
             return res.status(400).send({ status: false, message: "fname is required" })
         }
         if (!authorData.fname.match(nameRegex)) {
-            return res.status(400).send({ status: false, message: "Invalid format of fname" })
+            return res.status(403).send({ status: false, message: "Invalid format of fname" })
         }
         //================================ VALIDATING lname ===============================================
         if (!authorData.lname) {
             return res.status(400).send({ status: false, message: "lname is required" })
         }
         if (!authorData.lname.match(nameRegex)) {
-            return res.status(400).send({ status: false, message: "Invalid format of lname" })
+            return res.status(403).send({ status: false, message: "Invalid format of lname" })
         }
 
         //=======================================title validation =============================================
@@ -37,18 +37,18 @@ const createAuthors = async function (req, res) {
             return res.status(400).send({ status: false, message: "title is required" })
         }
         if (["Mr", "Mrs", "Miss"].indexOf(authorData.title) == -1) {
-            return res.status(400).send({ status: false, message: "please enter Mr , Mrs, Miss" })
+            return res.status(403).send({ status: false, message: "please enter Mr , Mrs, Miss" })
         }
         //=========================================email validation =============================================
         if (!authorData.email) {
             return res.status(400).send({ status: false, message: "email is required." })
         }
         if (!authorData.email.match(emailRegex)) {
-            return res.status(400).send({ status: false, message: "Invalid Format of email." })
+            return res.status(403).send({ status: false, message: "Invalid Format of email." })
         }
         let emailAlreadyExist = await authorModel.findOne({ email: authorData.email })
         if (emailAlreadyExist) {
-            return res.status(400).send({ status: false, message: "Email already exist." })
+            return res.status(403).send({ status: false, message: "Email already exist." })
         }
 
         //====================================== password validation =======================================       
@@ -56,7 +56,7 @@ const createAuthors = async function (req, res) {
             return res.status(400).send({ status: false, message: "password is required" })
         }
         if (!passwordRegex.test(authorData.password)) {
-            return res.status(400).send({ status: false, message: "Invalid format of password" })
+            return res.status(403).send({ status: false, message: "Invalid format of password" })
         }
 
         //========================================= author created ========================================

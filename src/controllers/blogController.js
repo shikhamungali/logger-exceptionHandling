@@ -33,16 +33,16 @@ const createNewBlog = async function (req, res) {
             return res.status(400).send({ status: false, msg: "AuthorId is required" })
         }
         if (!mongoose.Types.ObjectId.isValid(blogData.authorId)) {
-            return res.status(404).send({ status: false, msg: "invalid authorId format" });
+            return res.status(403).send({ status: false, msg: "invalid authorId format" });
         }
         //===================== validating the author if it exist or not =============================================
         let authorId = await authorModel.findById(blogData.authorId)
         if (!authorId) {
-            return res.status(400).send({ status: false, msg: "Author doesn't exist" })
+            return res.status(404).send({ status: false, msg: "Author doesn't exist" })
         }
         //***************** if author id is not matched with token author id *******************
         if (!(blogData.authorId == req.loggedInAuthorId)) {
-            return res.status(404).send({ status: false, msg: "author loggedIn is not allowed to create other author blogs" });
+            return res.status(401).send({ status: false, msg: "author loggedIn is not allowed to create other author blogs" });
         }
 
         // ============================== setting date if isPublished is true ================================
@@ -106,7 +106,7 @@ const updateBlogData = async function (req, res) {
         const blogUpdatedData = req.body
         //==================================== if data is not entered ==================================
         if (Object.keys(blogUpdatedData).length == 0) {
-            return res.status(404).send({ status: false, msg: "Please enter Data to be updated" });
+            return res.status(400).send({ status: false, msg: "Please enter Data to be updated" });
         }
 
         //====================================== updating data =========================================
