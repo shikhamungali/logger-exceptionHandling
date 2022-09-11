@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const blogModel = require('../models/blogModel')
+const blogModel = require('../models/blogmodel')
 const mongoose = require('mongoose')
 
 const authentication = function (req, res, next) {

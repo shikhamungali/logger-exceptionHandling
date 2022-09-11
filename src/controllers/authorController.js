@@ -1,4 +1,4 @@
-const authorModel = require('../models/authorModel')
+const authorModel = require('../models/authormodel')
 const jwt = require('jsonwebtoken')
 
 

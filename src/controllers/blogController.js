@@ -1,5 +1,5 @@
-const blogModel = require('../models/blogModel')
-const authorModel = require('../models/authorModel')
+const blogModel = require('../models/blogmodel')
+const authorModel = require('../models/authormodel')
 const mongoose = require('mongoose')
 
 
