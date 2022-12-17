@@ -1,0 +1,18 @@
+Dec-17-2022 19:33:35 [error] {"message":"401 - UserName or Password incorrect"}
+Dec-17-2022 19:35:50 [error] {"message":"400 - Unexpected token / in JSON at position 49"}
+Dec-17-2022 19:36:15 [error] {"message":"400 - Password is required"}
+Dec-17-2022 19:38:01 [error] {"message":"404 - Requested URL /logi not found!"}
+Dec-17-2022 19:39:34 [error] {"message":"401 - UserName or Password incorrect"}
+Dec-17-2022 19:42:18 [error] {"message":"401 - UserName or Password incorrect"}
+Dec-17-2022 19:42:51 [error] {"message":"400 - Unexpected token } in JSON at position 76"}
+Dec-17-2022 19:45:17 [error] {"message":"400 - Unexpected token \r in JSON at position 72"}
+Dec-17-2022 19:47:01 [error] {"message":"500 - UserName or Password incorrect"}
+Dec-17-2022 19:47:19 [error] {"message":"401 - UserName or Password incorrect"}
+Dec-17-2022 19:57:22 [error] {"message":"500 - Data is required"}
+Dec-17-2022 20:00:21 [error] {"message":"400 - Data is required"}
+Dec-17-2022 20:08:44 [error] {"message":"500 - Data is required"}
+Dec-17-2022 20:10:31 [error] {"message":"405 - Data is required"}
+Dec-17-2022 20:12:38 [error] {"message":"404 - Requested URL  localhost:3000/loginjjj not found!"}
+Dec-17-2022 20:13:31 [error] {"message":"500 - Requested URL localhost:3000/loginjjj not found!"}
+Dec-17-2022 20:26:40 [error] {"message":"404 - Requested URL localhost:3000/loginjjj not found!"}
+Dec-17-2022 20:33:24 [error] {"message":"404 - Requested URL localhost:3000/loginjjj not found!"}

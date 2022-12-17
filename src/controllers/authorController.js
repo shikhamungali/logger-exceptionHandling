@@ -1,5 +1,6 @@
 const authorModel = require('../models/authormodel')
 const jwt = require('jsonwebtoken')
+const AppError = require("../errorHandler/appError")
 
 
 //-------------------------------------------------- APIs /authors --------------------------------
@@ -14,49 +15,49 @@ const createAuthors = async function (req, res) {
         //=========================================== user not entered any data ==========================================
         let authorData = req.body
         if (Object.keys(authorData).length == 0) {
-            return res.status(400).send({ status: false, message: "please enter data" })
+            throw new AppError("please enter data", 400)
         }
 
         //====================================Validating fname ================================================
         if (!authorData.fname) {
-            return res.status(400).send({ status: false, message: "fname is required" })
+            throw new AppError("fname is required", 400)
         }
         if (!authorData.fname.match(nameRegex)) {
-            return res.status(400).send({ status: false, message: "Invalid format of fname" })
+            throw new AppError("Invalid format of fname", 400)
         }
         //================================ VALIDATING lname ===============================================
         if (!authorData.lname) {
-            return res.status(400).send({ status: false, message: "lname is required" })
+            throw new AppError("lname is required", 400)
         }
         if (!authorData.lname.match(nameRegex)) {
-            return res.status(400).send({ status: false, message: "Invalid format of lname" })
+            throw new AppError("Invalid format of lname", 400)
         }
 
         //=======================================title validation =============================================
         if (!authorData.title) {
-            return res.status(400).send({ status: false, message: "title is required" })
+            throw new AppError("title is required", 400)
         }
         if (["Mr", "Mrs", "Miss"].indexOf(authorData.title) == -1) {
-            return res.status(400).send({ status: false, message: "please enter Mr , Mrs, Miss" })
+            throw new AppError("please enter Mr , Mrs, Miss", 400)
         }
         //=========================================email validation =============================================
         if (!authorData.email) {
-            return res.status(400).send({ status: false, message: "email is required." })
+            throw new AppError("email is required.", 400)
         }
         if (!authorData.email.match(emailRegex)) {
-            return res.status(400).send({ status: false, message: "Invalid Format of email." })
+            throw new AppError("Invalid Format of email.", 400)
         }
         let emailAlreadyExist = await authorModel.findOne({ email: authorData.email })
         if (emailAlreadyExist) {
-            return res.status(400).send({ status: false, message: "Email already exist." })
+            throw new AppError("Email already exist.", 400)
         }
 
         //====================================== password validation =======================================       
         if (!authorData.password) {
-            return res.status(400).send({ status: false, message: "password is required" })
+            throw new AppError("password is required", 400)
         }
         if (!passwordRegex.test(authorData.password)) {
-            return res.status(400).send({ status: false, message: "Invalid format of password" })
+            throw new AppError("Invalid format of password", 400)
         }
 
         //========================================= author created ========================================
@@ -65,27 +66,13 @@ const createAuthors = async function (req, res) {
 
     }
     catch (error) {
-        return res.status(500).send({ status: false, Error: error.message })
+        next(error)
     }
 }
-
-
-//--------------------------------------------- get /authors -------------------------------------------------
-
-const getAuthor = async function (req, res) {
-    try {
-        let alldata = await authorModel.find()
-        return res.status(200).send({ status: true, data: alldata })
-    }
-    catch (error) {
-        return res.status(500).send({ status: false, Error: error.message })
-    }
-}
-
 
 //-----------------------------------------------POST /login------------------------------------------------
 
-const authorLogin = async function (req, res) {
+const authorLogin = async function (req, res,next) {
     try {
         let userName = req.body.email;
         let password = req.body.password;
@@ -93,28 +80,28 @@ const authorLogin = async function (req, res) {
         let user = await authorModel.findOne({ email: userName, password: password });
         //======================== if body is empty =============================================
         if (Object.keys(req.body).length == 0) {
-            return res.status(400).send({ status: false, msg: "Data is required" })
+            throw new AppError("Data is required", 400)
         }
         //============================= if username is not entered ====================================
         if (!userName) {
-            return res.status(400).send({ status: false, msg: "UserName is required" })
+            throw new AppError("UserName is required", 400)
         }
         //================================= if password id not entered ================================
         if (!password) {
-            return res.status(400).send({ status: false, msg: "Password is required" })
+            throw new AppError("Password is required", 400)
         }
         //===================================== if no matching data found =======================================
         if (!user) {
-            return res.status(401).send({ status: false, msg: "UserName or Password incorrect" });
+            throw new AppError("UserName or Password incorrect",401)
         }
         //=============================== token generation =====================================================
-        let payload = { _id: user._id, Group: "Group35", projectName: "BloggingSite" }
-        let token = jwt.sign(payload, "Blogging_site_group_35");
+        let payload = { _id: user._id,  projectName: "BloggingSite" }
+        let token = jwt.sign(payload, "loggerandexceptionalhandling");
         return res.status(201).send({ status: true, token: token });
     }
     catch (error) {
-        return res.status(500).send({ staus: false, msg: error.message })
+        next(error)
     }
 };
 
-module.exports = { createAuthors, getAuthor, authorLogin }
+module.exports = { createAuthors, authorLogin }
